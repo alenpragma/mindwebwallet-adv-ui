@@ -10,8 +10,8 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { providers, ethers } from "ethers";
 import Web3 from "web3";
-import USDTABI from "./1.json";
-import USDCABI from "./2.json";
+import USDTABI from "./abi/usdt.json";
+import USDCABI from "./abi/usdc.json";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
