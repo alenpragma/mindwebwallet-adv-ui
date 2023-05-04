@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { Button, TextField } from "@mui/material";
+import { Button, IconButton, TextField } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { keys } from "../sclices/privateKeySlice";
@@ -12,6 +12,18 @@ import { providers, ethers } from "ethers";
 import Web3 from "web3";
 import USDTABI from "./abi/usdt.json";
 import USDCABI from "./abi/usdc.json";
+import { ToastContainer, toast } from "react-toastify";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Slide from "@mui/material/Slide";
+import { FileCopy } from "@mui/icons-material";
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -125,12 +137,12 @@ const Account = () => {
 
     const amountInput = document.getElementById("amount");
     if (!amountInput || !amountInput.value) {
-      alert("Please enter a valid amount");
+      toast("Please enter a valid amount");
       return;
     }
     const amountToSend = parseFloat(amountInput.value);
     if (isNaN(amountToSend) || amountToSend <= 0) {
-      alert("Please enter a valid amount");
+      toast("Please enter a valid amount");
       return;
     }
 
@@ -154,7 +166,7 @@ const Account = () => {
       );
       tokenSymbol = "USDC";
     } else {
-      alert("Please select a token");
+      toast("Please select a token");
       return;
     }
 
@@ -242,10 +254,16 @@ const Account = () => {
 
     updateBalance();
   }, [keyData.key.keyInfo.address]);
-
+  let [youprivateKey, setYourPrivayteKey] = useState("");
+  const [dialopen, setDialOpen] = useState(false);
+  const handleClose = (youprivateKey) => {
+    navigator.clipboard.writeText(youprivateKey);
+    toast("You private key copied!");
+    setYourPrivayteKey("");
+  };
   const handleExportPrivateKey = () => {
     const wallet = new ethers.Wallet(keyData.key.keyInfo.privatekey);
-    alert(`Your private key is: ${wallet.privateKey}`);
+    setYourPrivayteKey(wallet.privateKey);
   };
 
   const [transactionStatus, setTransactionStatus] = useState(null);
@@ -283,19 +301,39 @@ const Account = () => {
 
   return (
     <>
-      <div className=" mt-5 px-[10px] max-w-container mx-auto">
+      <ToastContainer />
+      {youprivateKey && (
+        <Dialog
+          open={open}
+          TransitionComponent={Transition}
+          keepMounted
+          
+          aria-describedby="alert-dialog-slide-description"
+        >
+        <div className="p-4">
+        <div className="text-center">
+        <span className="text-[20px] font-bold text-colorprimary md:text-[26px]">Your private key</span>
+      </div>
+          <div className="text-center">
+            <span className="text-[12px] md:text-[18px]">{youprivateKey}</span>
+          </div>
+          <DialogActions className="flex">
+            
+           Copy <IconButton onClick={() => handleClose(youprivateKey)}>
+              <FileCopy />
+            </IconButton>
+          </DialogActions>
+        </div>
+
+        </Dialog>
+      )}
+      <div className=" mt-5 px-[10px] max-w-container mx-auto pb-4">
         <div className="p-5 rounded-md shadow-lg  w-full mx-auto">
           <div className="flex items-center justify-between">
             <h3 className="text-[20px] md:text-[25px] font-semibold text-colorprimary  uppercase mb-4">
               <AccountCircleIcon className="!text-[30px] mb-2" /> Account
             </h3>
-            <Button
-              onClick={handleExportPrivateKey}
-              variant="contained"
-              className=" !bg-colorprimary"
-            >
-              ExportWallet
-            </Button>
+
             <Button
               onClick={logout}
               variant="contained"
@@ -304,10 +342,21 @@ const Account = () => {
               Logout
             </Button>
           </div>
-          <p className="mt-5">Address: {keyData.key.keyInfo.address}</p>
-          <Typography variant="h6" gutterBottom>
-            <h2>Balance: {balance} MIND</h2>
+          <p className="mt-5 text-[12px] sm:text-[18px]">
+            Address: <span>{keyData.key.keyInfo.address}</span>
+          </p>
+          <Typography className="" variant="h6" gutterBottom>
+            <h2 className="text-[12px] sm:text-[18px]">
+              Balance: {balance} MIND
+            </h2>
           </Typography>
+          <Button
+            onClick={handleExportPrivateKey}
+            variant="contained"
+            className=" !bg-colorprimary !mt-5"
+          >
+            ExportWallet
+          </Button>
         </div>
         <div className="p-5 mt-10 rounded-md shadow-lg  w-full mx-auto">
           <Box
@@ -315,7 +364,7 @@ const Account = () => {
               flexGrow: 1,
               bgcolor: "background.paper",
               display: "flex",
-              height: 224,
+              padding: "10px",
             }}
           >
             <Tabs
@@ -335,7 +384,7 @@ const Account = () => {
               <Tab label="Item Seven" {...a11yProps(6)} />
             </Tabs>
             <TabPanel value={value} index={0}>
-              <div className="flex gap-x-5">
+              <div className="flex flex-col gap-y-5">
                 <TextField
                   id="outlined-basic"
                   label="Recipient Address"
@@ -359,24 +408,25 @@ const Account = () => {
               </div>
             </TabPanel>
             <TabPanel value={value} index={1}>
-              <div className="flex gap-x-5">
-                <h1>USDT Balance:</h1>
-                <p>{tokenBalance.usdt}</p>
-                <h1>USDC Balance:</h1>
-                <p>{tokenBalance.usdc}</p>
+              <div className="flex flex-col gap-y-2">
+                <h1>
+                  USDT Balance: <span>{tokenBalance.usdt}</span>
+                </h1>
+                <h1>
+                  USDC Balance: <span>{tokenBalance.usdc}</span>
+                </h1>
+                <label>
+                  <input type="radio" id="usdt" name="token" value="usdt" />{" "}
+                  USDT
+                </label>
+
+                <label>
+                  <input type="radio" id="usdc" name="token" value="usdc" />{" "}
+                  USDC
+                </label>
               </div>
 
-              <label>
-                <input type="radio" id="usdt" name="token" value="usdt" /> tick
-                here to send USDT
-              </label>
-              <br />
-              <label>
-                <input type="radio" id="usdc" name="token" value="usdc" />
-                USDC
-              </label>
-              <br />
-              <div className="flex gap-x-5">
+              <div className="flex gap-y-5 flex-col mt-4">
                 <TextField
                   id="outlined-basic"
                   label="Recipient Address"
@@ -426,4 +476,3 @@ const Account = () => {
 };
 
 export default Account;
-
