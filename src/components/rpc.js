@@ -1,8 +1,9 @@
 import { providers, ethers } from "ethers";
 import Web3 from "web3";
 
-let rpc1 = "https://mainnet-rpc.metaviralscan.com";
+let rpc1 ="https://mainnet-rpc.metaviralscan.com";
 let rpc2 = "https://testnet-rpc.metaviralscan.com";
+
 let provider = new ethers.providers.JsonRpcProvider(rpc1);
 let w3 = new Web3(rpc1);
 
@@ -14,7 +15,7 @@ async function switchProvider() {
     rpc = rpc1;
   }
   provider = new ethers.providers.JsonRpcProvider(rpc);
-  w3 = new Web3(rpc);
+  w3 = new Web3.providers.HttpProvider(rpc);
   const blockNumber = await provider.getBlockNumber();
   console.log(`Current block number: ${blockNumber}`);
   localStorage.setItem('network', rpc); // store the current network URL in localStorage

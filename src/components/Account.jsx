@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Button, IconButton, TextField } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { Provider, useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { keys } from "../sclices/privateKeySlice";
 import Tabs from "@mui/material/Tabs";
@@ -93,13 +93,13 @@ const Account = () => {
 
   useEffect(() => {
     const fetchTokenBalance = async () => {
-     
+    
       const signer = keyData.key.keyInfo.privatekey;
       const addr = keyData.key.keyInfo.address;
       const usdtContract = new ethers.Contract(
         "0x4855d5918621b0cCF80660A7735E363765493373",
         USDTABI,
-        provider
+        provider  
       );
       const usdcContract = new ethers.Contract(
         "0x566189880aCa09BA7aA696D9b6630A4Eb2Bb043f",
@@ -126,8 +126,8 @@ const Account = () => {
   }, [keyData]);
 
   const sendToken = async () => {
-    const web3Provider = new w3;
-    const web3 = new Web3(web3Provider);
+  
+    const web3 = w3;
 
     const privateKey = keyData.key.keyInfo.privatekey;
     const account = web3.eth.accounts.privateKeyToAccount(privateKey);
@@ -266,7 +266,7 @@ const Account = () => {
   const handleSend = async () => {
     try {
       setTransactionStatus("Pending");
-      const web3 = new w3;
+      const web3 = w3;
       const account = web3.eth.accounts.privateKeyToAccount(
         keyData.key.keyInfo.privatekey
       );
