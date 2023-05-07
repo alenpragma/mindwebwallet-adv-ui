@@ -20,6 +20,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import { FileCopy } from "@mui/icons-material";
+import { provider , w3 , switchProvider } from "./rpc";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -83,7 +84,7 @@ const Account = () => {
 
   let [wallet, setWallet] = useState("");
   let [balance, setBalance] = useState("");
-  let [provider, setProvider] = useState("");
+ 
   const [tokenBalance, setTokenBalance] = useState(0);
   const [rcvAddress, setrcvAddress] = useState("");
   const [amountToSend, setAmountToSend] = useState("");
@@ -92,9 +93,7 @@ const Account = () => {
 
   useEffect(() => {
     const fetchTokenBalance = async () => {
-      const provider = new ethers.providers.JsonRpcProvider(
-        "https://mainnet-rpc.metaviralscan.com"
-      );
+     
       const signer = keyData.key.keyInfo.privatekey;
       const addr = keyData.key.keyInfo.address;
       const usdtContract = new ethers.Contract(
@@ -127,9 +126,7 @@ const Account = () => {
   }, [keyData]);
 
   const sendToken = async () => {
-    const web3Provider = new Web3.providers.HttpProvider(
-      "https://mainnet-rpc.metaviralscan.com"
-    );
+    const web3Provider = new w3;
     const web3 = new Web3(web3Provider);
 
     const privateKey = keyData.key.keyInfo.privatekey;
@@ -208,14 +205,12 @@ const Account = () => {
   useEffect(() => {
     const connectProvider = async () => {
       try {
-        const provider = new ethers.providers.JsonRpcProvider(
-          "https://mainnet-rpc.metaviralscan.com"
-        );
+      
         await provider.getBlockNumber().then((blockNumber) => {
           // console.log(`Connected to RPC');
           console.log("connected");
         });
-        setProvider(provider);
+       (provider);
         if (localStorage.getItem("privateKey")) {
           const wallet = new ethers.Wallet(
             localStorage.getItem("privateKey"),
@@ -243,9 +238,7 @@ const Account = () => {
   useEffect(() => {
     const updateBalance = async () => {
       if (keyData.key.keyInfo.address) {
-        const provider = new ethers.providers.JsonRpcProvider(
-          "https://mainnet-rpc.metaviralscan.com"
-        );
+    
         const balance = await provider.getBalance(keyData.key.keyInfo.address);
         setBalance(ethers.utils.formatEther(balance));
         localStorage.setItem("balance", balance.toString());
@@ -273,7 +266,7 @@ const Account = () => {
   const handleSend = async () => {
     try {
       setTransactionStatus("Pending");
-      const web3 = new Web3("https://mainnet-rpc.metaviralscan.com");
+      const web3 = new w3;
       const account = web3.eth.accounts.privateKeyToAccount(
         keyData.key.keyInfo.privatekey
       );
@@ -334,6 +327,7 @@ const Account = () => {
               <AccountCircleIcon className="!text-[30px] mb-2" /> Account
             </h3>
 
+     
             <Button
               onClick={logout}
               variant="contained"
@@ -341,6 +335,15 @@ const Account = () => {
             >
               Logout
             </Button>
+            <Button
+              onClick={switchProvider}
+              variant="contained"
+              className=" !bg-colorprimary"
+            >
+              Swich Network 
+            </Button>
+         <br/>
+      
           </div>
           <p className="mt-5 text-[12px] sm:text-[18px]">
             Address: <span>{keyData.key.keyInfo.address}</span>
