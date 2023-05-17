@@ -335,14 +335,7 @@ const Account = () => {
             >
               Logout
             </Button>
-            <Button
-              onClick={switchProvider}
-              variant="contained"
-              className=" !bg-colorprimary"
-            >
-              Swich Network 
-            </Button>
-         <br/>
+           
       
           </div>
           <p className="mt-5 text-[12px] sm:text-[18px]">
@@ -353,13 +346,25 @@ const Account = () => {
               Balance: {balance} MIND
             </h2>
           </Typography>
+          <div className="flex items-center !mt-5 gap-x-3">
           <Button
             onClick={handleExportPrivateKey}
             variant="contained"
-            className=" !bg-colorprimary !mt-5"
+            className=" !bg-colorprimary "
           >
             ExportWallet
           </Button>
+          <Button
+              onClick={switchProvider}
+              variant="contained"
+              className=" !bg-colorprimary"
+            >
+              Swich Network 
+            </Button>
+      
+          </div>
+        
+          
         </div>
         <div className="p-5 mt-10 rounded-md shadow-lg  w-full mx-auto">
           <Box
@@ -386,12 +391,15 @@ const Account = () => {
               <Tab label="Item Six" {...a11yProps(5)} />
               <Tab label="Item Seven" {...a11yProps(6)} />
             </Tabs>
-            <TabPanel value={value} index={0}>
-              <div className="flex flex-col gap-y-5">
+            <TabPanel value={value} index={0} className="w-full">
+              <div className="flex flex-col gap-y-5 w-full">
+                <div className="text-colorprimary text-center font-semibold text-[14px] md:text-[18px] ">Perform a regular transaction, send MIND to another account</div>
                 <TextField
                   id="outlined-basic"
                   label="Recipient Address"
+                  className="!w-full"
                   variant="outlined"
+                  value={recipientAddress}
                   onChange={(e) => setRecipientAddress(e.target.value)}
                 />
                 <TextField
@@ -399,8 +407,17 @@ const Account = () => {
                   type="number"
                   label="Amount"
                   variant="outlined"
+                  value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                 />
+                <div className="flex gap-x-3">
+                <Button
+                  onClick={()=>{setRecipientAddress("");setAmount("")}}
+                  variant="contained"
+                  className=" !bg-white !text-colorprimary"
+                >
+                  Reset
+                </Button>
                 <Button
                   onClick={handleSend}
                   variant="contained"
@@ -408,6 +425,7 @@ const Account = () => {
                 >
                   Send
                 </Button>
+                </div>
               </div>
             </TabPanel>
             <TabPanel value={value} index={1}>
