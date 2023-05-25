@@ -9,7 +9,7 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { providers, ethers } from "ethers";
-import Web3 from "web3";
+//import Web3 from "web3";
 import USDTABI from "./abi/usdt.json";
 import USDCABI from "./abi/usdc.json";
 import { ToastContainer, toast } from "react-toastify";
@@ -21,6 +21,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import { FileCopy } from "@mui/icons-material";
 import { provider , w3 , switchProvider } from "./rpc";
+import { abi } from './abi/erc20';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -292,6 +293,112 @@ const Account = () => {
     }
   };
 
+
+  const [tList, setTList] = useState([]);
+  const [sTokenAddress, setSTokenAddress] = useState('');
+  const [sAmount, setSAmount] = useState('');
+  const [rAddress, setRAddress] = useState('');
+  const [tBalance, setTBalance] = useState('');
+
+  const privateKey = keyData.key.keyInfo.privatekey;
+  const web3 = w3;
+  useEffect(() => {
+    const storedTokens = localStorage.getItem('importedTokens');
+    if (storedTokens) {
+      setTList(JSON.parse(storedTokens));
+    }
+  }, []);
+
+  useEffect(() => {
+    utb();
+    localStorage.setItem('importedTokens', JSON.stringify(tList));
+  }, [sTokenAddress, tList]);
+
+  const utb = async () => {
+    if (sTokenAddress) {
+      try {
+        const tokenContract = new web3.eth.Contract(abi, sTokenAddress);
+        const balance = await tokenContract.methods.balanceOf(web3.eth.accounts.privateKeyToAccount(privateKey).address).call();
+        setTBalance(balance);
+      } catch (error) {
+        console.error('Failed to update token balance:', error);
+      }
+    }
+  };
+
+  const importToken = async (contractAddress) => {
+    const formattedAddress = contractAddress.trim();
+
+    const existingToken = tList.find((token) => token.contractAddress === formattedAddress);
+    if (existingToken) {
+      console.log('Token is already imported.');
+      return;
+    }
+
+    try {
+      const tokenContract = new web3.eth.Contract(abi, formattedAddress);
+      if (!tokenContract.methods.name) {
+        throw new Error('Invalid token contract ABI.');
+      }
+
+      const name = await tokenContract.methods.name().call();
+      const symbol = await tokenContract.methods.symbol().call();
+      const balance = await tokenContract.methods.balanceOf(web3.eth.accounts.privateKeyToAccount(privateKey).address).call();
+
+      const newToken = {
+        contractAddress: formattedAddress,
+        name,
+        symbol,
+        selected: false,
+      };
+
+      const updatedTokens = [...tList, newToken];
+      setTList(updatedTokens);
+      setSTokenAddress(formattedAddress);
+    } catch (error) {
+      console.error('Failed to import token:', error);
+    }
+  };
+
+  const st = async () => {
+    const token = tList.find((token) => token.contractAddress === sTokenAddress);
+    if (!token) {
+      console.log('Please select a token.');
+      return;
+    }
+
+    try {
+      const tokenContract = new web3.eth.Contract(abi, token.contractAddress);
+      const amount = web3.utils.toWei(sAmount);
+      const recipient = rAddress.trim();
+
+      const transaction = tokenContract.methods.transfer(recipient, amount);
+      const encodedTransaction = transaction.encodeABI();
+      const gas = await transaction.estimateGas({ from: web3.eth.accounts.privateKeyToAccount(privateKey).address });
+      const signedTransaction = await web3.eth.accounts.signTransaction(
+        {
+          to: token.contractAddress,
+          data: encodedTransaction,
+          gas: gas,
+        },
+        privateKey
+      );
+
+      const receipt = await web3.eth.sendSignedTransaction(signedTransaction.rawTransaction);
+      console.log('Transaction successful:', receipt);
+
+      utb();
+    } catch (error) {
+      console.error('Transaction failed:', error);
+    }
+  };
+
+  const handleTokenSelection = (e) => {
+    setSTokenAddress(e.target.value);
+  };
+
+
+
   return (
     <>
       <ToastContainer />
@@ -385,7 +492,7 @@ const Account = () => {
             >
               <Tab label="Send MIND" {...a11yProps(0)} />
               <Tab label="Send token" {...a11yProps(1)} />
-              <Tab label="Item Three" {...a11yProps(2)} />
+              <Tab label="import erc20" {...a11yProps(2)} />
               <Tab label="Item Four" {...a11yProps(3)} />
               <Tab label="Item Five" {...a11yProps(4)} />
               <Tab label="Item Six" {...a11yProps(5)} />
@@ -475,7 +582,80 @@ const Account = () => {
               </div>
             </TabPanel>
             <TabPanel value={value} index={2}>
-              Item Three
+           <div>
+            <div>
+       
+    
+               <TextField
+                  id="outlined-basic"
+                  value={sTokenAddress}
+                  label="Enter ERC20 token contract address"
+                  variant="outlined"
+                  onChange={handleTokenSelection}
+                />
+
+
+<Button
+                  onClick={() => importToken(sTokenAddress)}
+                  variant="contained"
+                  className=" !bg-colorprimary"
+                >
+                 import token
+                </Button>
+
+      </div>
+
+      <h2>Imported Tokens</h2>
+      {tList.map((token) => (
+        <div key={token.contractAddress}>
+          <h3>{token.name}</h3>
+          <p>Symbol: {token.symbol}</p>
+          <p>Balance: {web3.utils.fromWei(tBalance)}</p>
+          <label>
+            <input
+              type="checkbox"
+              checked={token.contractAddress === sTokenAddress}
+              onChange={() => setSTokenAddress(token.contractAddress)}
+            />
+            Select
+          </label>
+        </div>
+      ))}
+
+      <h2>Send Token</h2>
+      <div>
+        <label>Amount to Send:</label>
+
+
+<TextField
+                  id="amount"
+                  type="number"
+                  label="Amount"
+                  variant="outlined"
+                  onChange={(e) => setSAmount(e.target.value)}
+                />
+      </div>
+      <div>
+        <label>Recipient Address:</label>
+       
+         <TextField
+                  id="outlined-basic"
+                  value={rAddress}
+                  label="Recipient Address"
+                  variant="outlined"
+                  onChange={(e) => setrcvAddress(e.target.value)}
+                />
+      </div>
+      <Button
+                  onClick={st}
+                  variant="contained"
+                  className=" !bg-colorprimary"
+                >
+                  Send
+                </Button>
+
+    </div>
+
             </TabPanel>
             <TabPanel value={value} index={3}>
               Item Four
