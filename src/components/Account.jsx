@@ -9,7 +9,7 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { providers, ethers } from "ethers";
-import Web3 from "web3";
+//import Web3 from "web3";
 import USDTABI from "./abi/usdt.json";
 import USDCABI from "./abi/usdc.json";
 import { ToastContainer, toast } from "react-toastify";
@@ -20,7 +20,8 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import { FileCopy } from "@mui/icons-material";
-import { provider , w3 , switchProvider } from "./rpc";
+import { provider, w3, switchProvider } from "./rpc";
+import { abi } from "./abi/erc20";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -84,7 +85,7 @@ const Account = () => {
 
   let [wallet, setWallet] = useState("");
   let [balance, setBalance] = useState("");
- 
+
   const [tokenBalance, setTokenBalance] = useState(0);
   const [rcvAddress, setrcvAddress] = useState("");
   const [amountToSend, setAmountToSend] = useState("");
@@ -93,13 +94,12 @@ const Account = () => {
 
   useEffect(() => {
     const fetchTokenBalance = async () => {
-    
       const signer = keyData.key.keyInfo.privatekey;
       const addr = keyData.key.keyInfo.address;
       const usdtContract = new ethers.Contract(
         "0x4855d5918621b0cCF80660A7735E363765493373",
         USDTABI,
-        provider  
+        provider
       );
       const usdcContract = new ethers.Contract(
         "0x566189880aCa09BA7aA696D9b6630A4Eb2Bb043f",
@@ -126,7 +126,6 @@ const Account = () => {
   }, [keyData]);
 
   const sendToken = async () => {
-  
     const web3 = w3;
 
     const privateKey = keyData.key.keyInfo.privatekey;
@@ -205,12 +204,11 @@ const Account = () => {
   useEffect(() => {
     const connectProvider = async () => {
       try {
-      
         await provider.getBlockNumber().then((blockNumber) => {
           // console.log(`Connected to RPC');
           console.log("connected");
         });
-       (provider);
+        provider;
         if (localStorage.getItem("privateKey")) {
           const wallet = new ethers.Wallet(
             localStorage.getItem("privateKey"),
@@ -238,7 +236,6 @@ const Account = () => {
   useEffect(() => {
     const updateBalance = async () => {
       if (keyData.key.keyInfo.address) {
-    
         const balance = await provider.getBalance(keyData.key.keyInfo.address);
         setBalance(ethers.utils.formatEther(balance));
         localStorage.setItem("balance", balance.toString());
@@ -292,6 +289,121 @@ const Account = () => {
     }
   };
 
+  const [tList, setTList] = useState(() => {
+    const storedTokens = localStorage.getItem("importedTokens");
+    return storedTokens ? JSON.parse(storedTokens) : [];
+  });
+  const [sTokenAddress, setSTokenAddress] = useState("");
+  const [sAmount, setSAmount] = useState("");
+  const [rAddress, setRAddress] = useState("");
+  const [tBalance, setTBalance] = useState("");
+
+  const privateKey = keyData.key.keyInfo.privatekey;
+  const web3 = w3;
+
+  useEffect(() => {
+    localStorage.setItem("importedTokens", JSON.stringify(tList));
+  }, [tList]);
+
+  useEffect(() => {
+    utb();
+  }, [sTokenAddress]);
+
+  const utb = async () => {
+    if (sTokenAddress) {
+      try {
+        const tokenContract = new web3.eth.Contract(abi, sTokenAddress);
+        const balance = await tokenContract.methods
+          .balanceOf(web3.eth.accounts.privateKeyToAccount(privateKey).address)
+          .call();
+        setTBalance(balance);
+      } catch (error) {
+        console.error("Failed to update token balance:", error);
+      }
+    }
+  };
+
+  const importToken = async (contractAddress) => {
+    const formattedAddress = contractAddress.trim();
+
+    const existingToken = tList.find(
+      (token) => token.contractAddress === formattedAddress
+    );
+    if (existingToken) {
+      console.log("Token is already imported.");
+      return;
+    }
+
+    try {
+      const tokenContract = new web3.eth.Contract(abi, formattedAddress);
+      if (!tokenContract.methods.name) {
+        throw new Error("Invalid token contract ABI.");
+      }
+
+      const name = await tokenContract.methods.name().call();
+      const symbol = await tokenContract.methods.symbol().call();
+      const balance = await tokenContract.methods
+        .balanceOf(web3.eth.accounts.privateKeyToAccount(privateKey).address)
+        .call();
+
+      const newToken = {
+        contractAddress: formattedAddress,
+        name,
+        symbol,
+        selected: false,
+      };
+
+      const updatedTokens = [...tList, newToken];
+      setTList(updatedTokens);
+      setSTokenAddress(formattedAddress);
+    } catch (error) {
+      console.error("Failed to import token:", error);
+    }
+  };
+
+  const st = async () => {
+    const token = tList.find(
+      (token) => token.contractAddress === sTokenAddress
+    );
+    if (!token) {
+      console.log("Please select a token.");
+      return;
+    }
+
+    try {
+      const tokenContract = new web3.eth.Contract(abi, token.contractAddress);
+      const amount = web3.utils.toWei(sAmount);
+      const recipient = rAddress.trim();
+
+      const transaction = tokenContract.methods.transfer(recipient, amount);
+      const encodedTransaction = transaction.encodeABI();
+      const gas = await transaction.estimateGas({
+        from: web3.eth.accounts.privateKeyToAccount(privateKey).address,
+      });
+      const signedTransaction = await web3.eth.accounts.signTransaction(
+        {
+          to: token.contractAddress,
+          data: encodedTransaction,
+          gas: gas,
+        },
+        privateKey
+      );
+
+      const receipt = await web3.eth.sendSignedTransaction(
+        signedTransaction.rawTransaction
+      );
+      console.log("Transaction successful:", receipt);
+
+      utb();
+    } catch (error) {
+      console.error("Transaction failed:", error);
+    }
+  };
+
+  const handleTokenSelection = (e) => {
+    setSTokenAddress(e.target.value);
+  };
+
   return (
     <>
       <ToastContainer />
@@ -300,24 +412,26 @@ const Account = () => {
           open={open}
           TransitionComponent={Transition}
           keepMounted
-          
           aria-describedby="alert-dialog-slide-description"
         >
-        <div className="p-4">
-        <div className="text-center">
-        <span className="text-[20px] font-bold text-colorprimary md:text-[26px]">Your private key</span>
-      </div>
-          <div className="text-center">
-            <span className="text-[12px] md:text-[18px]">{youprivateKey}</span>
+          <div className="p-4">
+            <div className="text-center">
+              <span className="text-[20px] font-bold text-colorprimary md:text-[26px]">
+                Your private key
+              </span>
+            </div>
+            <div className="text-center">
+              <span className="text-[12px] md:text-[18px]">
+                {youprivateKey}
+              </span>
+            </div>
+            <DialogActions className="flex">
+              Copy{" "}
+              <IconButton onClick={() => handleClose(youprivateKey)}>
+                <FileCopy />
+              </IconButton>
+            </DialogActions>
           </div>
-          <DialogActions className="flex">
-            
-           Copy <IconButton onClick={() => handleClose(youprivateKey)}>
-              <FileCopy />
-            </IconButton>
-          </DialogActions>
-        </div>
-
         </Dialog>
       )}
       <div className=" mt-5 px-[10px] max-w-container mx-auto pb-4">
@@ -327,7 +441,6 @@ const Account = () => {
               <AccountCircleIcon className="!text-[30px] mb-2" /> Account
             </h3>
 
-     
             <Button
               onClick={logout}
               variant="contained"
@@ -335,8 +448,6 @@ const Account = () => {
             >
               Logout
             </Button>
-           
-      
           </div>
           <p className="mt-5 text-[12px] sm:text-[18px]">
             Address: <span>{keyData.key.keyInfo.address}</span>
@@ -347,24 +458,21 @@ const Account = () => {
             </h2>
           </Typography>
           <div className="flex items-center !mt-5 gap-x-3">
-          <Button
-            onClick={handleExportPrivateKey}
-            variant="contained"
-            className=" !bg-colorprimary "
-          >
-            ExportWallet
-          </Button>
-          <Button
+            <Button
+              onClick={handleExportPrivateKey}
+              variant="contained"
+              className=" !bg-colorprimary "
+            >
+              ExportWallet
+            </Button>
+            <Button
               onClick={switchProvider}
               variant="contained"
               className=" !bg-colorprimary"
             >
-              Swich Network 
+              Swich Network
             </Button>
-      
           </div>
-        
-          
         </div>
         <div className="p-5 mt-10 rounded-md shadow-lg  w-full mx-auto">
           <Box
@@ -385,7 +493,7 @@ const Account = () => {
             >
               <Tab label="Send MIND" {...a11yProps(0)} />
               <Tab label="Send token" {...a11yProps(1)} />
-              <Tab label="Item Three" {...a11yProps(2)} />
+              <Tab label="import erc20" {...a11yProps(2)} />
               <Tab label="Item Four" {...a11yProps(3)} />
               <Tab label="Item Five" {...a11yProps(4)} />
               <Tab label="Item Six" {...a11yProps(5)} />
@@ -393,7 +501,9 @@ const Account = () => {
             </Tabs>
             <TabPanel value={value} index={0} className="w-full">
               <div className="flex flex-col gap-y-5 w-full">
-                <div className="text-colorprimary text-center font-semibold text-[14px] md:text-[18px] ">Perform a regular transaction, send MIND to another account</div>
+                <div className="text-colorprimary text-center font-semibold text-[14px] md:text-[18px] ">
+                  Perform a regular transaction, send MIND to another account
+                </div>
                 <TextField
                   id="outlined-basic"
                   label="Recipient Address"
@@ -411,25 +521,28 @@ const Account = () => {
                   onChange={(e) => setAmount(e.target.value)}
                 />
                 <div className="flex gap-x-3">
-                <Button
-                  onClick={()=>{setRecipientAddress("");setAmount("")}}
-                  variant="contained"
-                  className=" !bg-white !text-colorprimary"
-                >
-                  Reset
-                </Button>
-                <Button
-                  onClick={handleSend}
-                  variant="contained"
-                  className=" !bg-colorprimary"
-                >
-                  Send
-                </Button>
+                  <Button
+                    onClick={() => {
+                      setRecipientAddress("");
+                      setAmount("");
+                    }}
+                    variant="contained"
+                    className=" !bg-white !text-colorprimary"
+                  >
+                    Reset
+                  </Button>
+                  <Button
+                    onClick={handleSend}
+                    variant="contained"
+                    className=" !bg-colorprimary"
+                  >
+                    Send
+                  </Button>
                 </div>
               </div>
             </TabPanel>
-            <TabPanel value={value} index={1}>
-              <div className="flex flex-col gap-y-2">
+            <TabPanel value={value} index={1} className="w-full">
+              <div className="flex flex-col gap-y-2 w-full">
                 <h1>
                   USDT Balance: <span>{tokenBalance.usdt}</span>
                 </h1>
@@ -447,12 +560,13 @@ const Account = () => {
                 </label>
               </div>
 
-              <div className="flex gap-y-5 flex-col mt-4">
+              <div className="flex gap-y-5 flex-col mt-4 w-full">
                 <TextField
                   id="outlined-basic"
                   label="Recipient Address"
                   variant="outlined"
                   onChange={(e) => setrcvAddress(e.target.value)}
+                  className="!w-full"
                 />
 
                 <TextField
@@ -461,22 +575,96 @@ const Account = () => {
                   label="Amount"
                   variant="outlined"
                   onChange={(e) => setAmountToSend(e.target.value)}
+                  className="!w-full"
                 />
 
-                <Button
+             <div className="">
+             <Button
                   onClick={sendToken}
                   variant="contained"
                   className=" !bg-colorprimary"
                 >
                   Send
                 </Button>
+             </div>
+
 
                 <p>Transaction Hash: {transactionHash}</p>
               </div>
             </TabPanel>
-            <TabPanel value={value} index={2}>
-              Item Three
+            <TabPanel value={value} index={2} className="!w-full">
+              <div>
+                <div className="flex flex-col w-full">
+                  <TextField
+                    id="token-address"
+                    value={sTokenAddress}
+                    label="Enter ERC20 token contract address"
+                    variant="outlined"
+                    onChange={handleTokenSelection}
+                    className="!w-full"
+                  />
+
+                  <div className="mt-3">
+                  <Button
+                    onClick={() => importToken(sTokenAddress)}
+                    variant="contained"
+                    className="import-token-btn "
+                  >
+                    Import Token
+                  </Button>
+                  </div>
+                </div>
+
+                <h2 className="text-colorprimary  font-semibold text-[14px] md:text-[18px] mt-3">Imported Tokens</h2>
+                {tList.map((token) => (
+                  <div key={token.contractAddress}>
+                    <h3>{token.name}</h3>
+                    <p>Symbol: {token.symbol}</p>
+                    <p>Balance: {web3.utils.fromWei(tBalance)}</p>
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={token.contractAddress === sTokenAddress}
+                        onChange={() => setSTokenAddress(token.contractAddress)}
+                      />
+                      Select
+                    </label>
+                  </div>
+                ))}
+
+                <h2 className="text-colorprimary  font-semibold text-[14px] md:text-[18px] mt-3">Send Token</h2>
+                <div className="flex flex-col  gap-x-3 mt-7 w-full ">
+                  <label htmlFor="amount-input" className="font-semibold mb-2">Amount to Send:</label>
+                  <TextField
+                    id="amount-input"
+                    type="number"
+                    label="Amount"
+                    variant="outlined"
+                    onChange={(e) => setSAmount(e.target.value)}
+                    className="!w-full"
+                  />
+                </div>
+                <div className="flex flex-col  gap-x-3 mt-3 w-full">
+                  <label htmlFor="recipient-input" className="font-semibold mb-2">Recipient Address:</label>
+                  <TextField
+                    id="recipient-input"
+                    value={rAddress}
+                    label="Recipient Address"
+                    variant="outlined"
+                    onChange={(e) => setRAddress(e.target.value)}
+                    className="!w-full"
+                  />
+                </div>
+                <Button
+                  onClick={st}
+                  variant="contained"
+                  className="send-token-btn !mt-3"
+                >
+                  Send
+                </Button>
+              </div>
             </TabPanel>
+
             <TabPanel value={value} index={3}>
               Item Four
             </TabPanel>
