@@ -494,10 +494,10 @@ const Account = () => {
               <Tab label="Send MIND" {...a11yProps(0)} />
               <Tab label="Send token" {...a11yProps(1)} />
               <Tab label="import erc20" {...a11yProps(2)} />
-              <Tab label="Item Four" {...a11yProps(3)} />
+              {/* <Tab label="Item Four" {...a11yProps(3)} />
               <Tab label="Item Five" {...a11yProps(4)} />
               <Tab label="Item Six" {...a11yProps(5)} />
-              <Tab label="Item Seven" {...a11yProps(6)} />
+              <Tab label="Item Seven" {...a11yProps(6)} /> */}
             </Tabs>
             <TabPanel value={value} index={0} className="w-full">
               <div className="flex flex-col gap-y-5 w-full">
@@ -665,7 +665,7 @@ const Account = () => {
               </div>
             </TabPanel>
 
-            <TabPanel value={value} index={3}>
+            {/* <TabPanel value={value} index={3}>
               Item Four
             </TabPanel>
             <TabPanel value={value} index={4}>
@@ -676,7 +676,7 @@ const Account = () => {
             </TabPanel>
             <TabPanel value={value} index={6}>
               Item Seven
-            </TabPanel>
+            </TabPanel> */}
           </Box>
         </div>
       </div>
