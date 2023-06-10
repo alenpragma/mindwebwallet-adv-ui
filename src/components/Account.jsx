@@ -403,9 +403,13 @@ const Account = () => {
   const handleTokenSelection = (e) => {
     setSTokenAddress(e.target.value);
   };
+  useEffect(()=>{
+document.title = "Account"
+  },[document.title])
 
   return (
     <>
+
       <ToastContainer />
       {youprivateKey && (
         <Dialog
@@ -474,7 +478,7 @@ const Account = () => {
             </Button>
           </div>
         </div>
-        <div className="p-5 mt-10 rounded-md shadow-lg  w-full mx-auto">
+        <div className="p-2 md:p-5 mt-10 rounded-md shadow-lg  w-full mx-auto text-">
           <Box
             sx={{
               flexGrow: 1,
@@ -490,16 +494,18 @@ const Account = () => {
               onChange={handleChange}
               aria-label="Vertical tabs example"
               sx={{ borderRight: 1, borderColor: "divider" }}
+            
+              
             >
-              <Tab label="Send MIND" {...a11yProps(0)} />
-              <Tab label="Send token" {...a11yProps(1)} />
-              <Tab label="import erc20" {...a11yProps(2)} />
+              <Tab className=" !text-[12px] md:!text-[15px] " label="Send MIND" {...a11yProps(0)} />
+              <Tab className="!text-[12px] md:!text-[15px] " label="Send token" {...a11yProps(1)} />
+              <Tab className="!text-[12px] md:!text-[15px] " label="import erc20" {...a11yProps(2)} />
               {/* <Tab label="Item Four" {...a11yProps(3)} />
               <Tab label="Item Five" {...a11yProps(4)} />
               <Tab label="Item Six" {...a11yProps(5)} />
               <Tab label="Item Seven" {...a11yProps(6)} /> */}
-            </Tabs>
-            <TabPanel value={value} index={0} className="w-full">
+            </Tabs> 
+            <TabPanel  value={value} index={0} className="!w-full   !text-[12px] md:!text-[15px]">
               <div className="flex flex-col gap-y-5 w-full">
                 <div className="text-colorprimary text-center font-semibold text-[14px] md:text-[18px] ">
                   Perform a regular transaction, send MIND to another account
@@ -541,8 +547,8 @@ const Account = () => {
                 </div>
               </div>
             </TabPanel>
-            <TabPanel value={value} index={1} className="w-full">
-              <div className="flex flex-col gap-y-2 w-full">
+            <TabPanel   value={value} index={1} className="!w-full   !text-[12px] md:!text-[15px]">
+              <div className="flex flex-col gap-y-2 w-full !text-[12px] md:!text-[15px]">
                 <h1>
                   USDT Balance: <span>{tokenBalance.usdt}</span>
                 </h1>
@@ -575,7 +581,7 @@ const Account = () => {
                   label="Amount"
                   variant="outlined"
                   onChange={(e) => setAmountToSend(e.target.value)}
-                  className="!w-full"
+                  className="!w-full "
                 />
 
              <div className="">
@@ -589,10 +595,10 @@ const Account = () => {
              </div>
 
 
-                <p>Transaction Hash: {transactionHash}</p>
+                <p className="!text-[12px] md:!text-[15px]">Transaction Hash: {transactionHash}</p>
               </div>
             </TabPanel>
-            <TabPanel value={value} index={2} className="!w-full">
+            <TabPanel   value={value} index={2} className="!w-full   !text-[12px] md:!text-[15px]">
               <div>
                 <div className="flex flex-col w-full">
                   <TextField
@@ -664,7 +670,7 @@ const Account = () => {
                 </Button>
               </div>
             </TabPanel>
-
+ 
             {/* <TabPanel value={value} index={3}>
               Item Four
             </TabPanel>
