@@ -478,13 +478,13 @@ document.title = "Account"
             </Button>
           </div>
         </div>
-        <div className="p-2 md:p-5 mt-10 rounded-md shadow-lg  w-full mx-auto text-">
+        <div className="p-0 md:p-5 mt-10 rounded-md shadow-lg  w-full mx-auto text-">
           <Box
             sx={{
               flexGrow: 1,
               bgcolor: "background.paper",
               display: "flex",
-              padding: "10px",
+            
             }}
           >
             <Tabs
