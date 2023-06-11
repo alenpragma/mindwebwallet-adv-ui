@@ -140,6 +140,9 @@ const OpenWallet = () => {
       toast("Invalid private key");
     }
   };
+  useEffect(()=>{
+    document.title = "Open Wallet"
+      },[document.title])
 
   return (
     <>

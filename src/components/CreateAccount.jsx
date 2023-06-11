@@ -68,6 +68,9 @@ const CreateAccount = () => {
   window.onbeforeunload = function() {
     navigate("/createaccount")
   };
+  useEffect(()=>{
+    document.title = "Create Wallet"
+      },[document.title])
   return (
     <>
     <ToastContainer />

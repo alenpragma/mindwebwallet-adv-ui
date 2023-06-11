@@ -403,9 +403,13 @@ const Account = () => {
   const handleTokenSelection = (e) => {
     setSTokenAddress(e.target.value);
   };
+  useEffect(()=>{
+document.title = "Account"
+  },[document.title])
 
   return (
     <>
+
       <ToastContainer />
       {youprivateKey && (
         <Dialog
@@ -444,7 +448,7 @@ const Account = () => {
             <Button
               onClick={logout}
               variant="contained"
-              className=" !bg-colorprimary"
+              className=" !bg-colorprimary !text-[12px] md:!text-[15px]"
             >
               Logout
             </Button>
@@ -461,26 +465,26 @@ const Account = () => {
             <Button
               onClick={handleExportPrivateKey}
               variant="contained"
-              className=" !bg-colorprimary "
+              className=" !bg-colorprimary !text-[12px] md:!text-[15px]"
             >
               ExportWallet
             </Button>
             <Button
               onClick={switchProvider}
               variant="contained"
-              className=" !bg-colorprimary"
+              className=" !bg-colorprimary !text-[12px] md:!text-[15px]"
             >
               Swich Network
             </Button>
           </div>
         </div>
-        <div className="p-5 mt-10 rounded-md shadow-lg  w-full mx-auto">
+        <div className="p-0 md:p-5 mt-10 rounded-md shadow-lg  w-full mx-auto text-">
           <Box
             sx={{
               flexGrow: 1,
               bgcolor: "background.paper",
               display: "flex",
-              padding: "10px",
+            
             }}
           >
             <Tabs
@@ -491,15 +495,11 @@ const Account = () => {
               aria-label="Vertical tabs example"
               sx={{ borderRight: 1, borderColor: "divider" }}
             >
-              <Tab label="Send MIND" {...a11yProps(0)} />
-              <Tab label="Send token" {...a11yProps(1)} />
-              <Tab label="import erc20" {...a11yProps(2)} />
-              <Tab label="Item Four" {...a11yProps(3)} />
-              <Tab label="Item Five" {...a11yProps(4)} />
-              <Tab label="Item Six" {...a11yProps(5)} />
-              <Tab label="Item Seven" {...a11yProps(6)} />
-            </Tabs>
-            <TabPanel value={value} index={0} className="w-full">
+              <Tab className=" !text-[12px] md:!text-[15px] " label="Send MIND" {...a11yProps(0)} />
+              <Tab className="!text-[12px] md:!text-[15px] " label="Send token" {...a11yProps(1)} />
+              <Tab className="!text-[12px] md:!text-[15px] " label="import erc20" {...a11yProps(2)} />
+            </Tabs> 
+            <TabPanel  value={value} index={0} className="!w-full   !text-[12px] md:!text-[15px]">
               <div className="flex flex-col gap-y-5 w-full">
                 <div className="text-colorprimary text-center font-semibold text-[14px] md:text-[18px] ">
                   Perform a regular transaction, send MIND to another account
@@ -527,22 +527,22 @@ const Account = () => {
                       setAmount("");
                     }}
                     variant="contained"
-                    className=" !bg-white !text-colorprimary"
+                    className=" !bg-white !text-colorprimary !text-[12px] md:!text-[15px]"
                   >
                     Reset
                   </Button>
                   <Button
                     onClick={handleSend}
                     variant="contained"
-                    className=" !bg-colorprimary"
+                    className=" !bg-colorprimary !text-[12px] md:!text-[15px]"
                   >
                     Send
                   </Button>
                 </div>
               </div>
             </TabPanel>
-            <TabPanel value={value} index={1} className="w-full">
-              <div className="flex flex-col gap-y-2 w-full">
+            <TabPanel   value={value} index={1} className="!w-full   !text-[12px] md:!text-[15px]">
+              <div className="flex flex-col gap-y-2 w-full !text-[12px] md:!text-[15px]">
                 <h1>
                   USDT Balance: <span>{tokenBalance.usdt}</span>
                 </h1>
@@ -559,7 +559,6 @@ const Account = () => {
                   USDC
                 </label>
               </div>
-
               <div className="flex gap-y-5 flex-col mt-4 w-full">
                 <TextField
                   id="outlined-basic"
@@ -575,24 +574,21 @@ const Account = () => {
                   label="Amount"
                   variant="outlined"
                   onChange={(e) => setAmountToSend(e.target.value)}
-                  className="!w-full"
+                  className="!w-full "
                 />
-
              <div className="">
              <Button
                   onClick={sendToken}
                   variant="contained"
-                  className=" !bg-colorprimary"
+                  className=" !bg-colorprimary !text-[12px] md:!text-[15px]"
                 >
                   Send
                 </Button>
              </div>
-
-
-                <p>Transaction Hash: {transactionHash}</p>
+                <p className="!text-[12px] md:!text-[15px]">Transaction Hash: {transactionHash}</p>
               </div>
             </TabPanel>
-            <TabPanel value={value} index={2} className="!w-full">
+            <TabPanel   value={value} index={2} className="!w-full   !text-[12px] md:!text-[15px]">
               <div>
                 <div className="flex flex-col w-full">
                   <TextField
@@ -608,7 +604,7 @@ const Account = () => {
                   <Button
                     onClick={() => importToken(sTokenAddress)}
                     variant="contained"
-                    className="import-token-btn "
+                    className="import-token-btn !text-[12px] md:!text-[15px]"
                   >
                     Import Token
                   </Button>
@@ -658,25 +654,14 @@ const Account = () => {
                 <Button
                   onClick={st}
                   variant="contained"
-                  className="send-token-btn !mt-3"
+                  className="send-token-btn !mt-3 !text-[12px] md:!text-[15px]"
                 >
                   Send
                 </Button>
               </div>
             </TabPanel>
-
-            <TabPanel value={value} index={3}>
-              Item Four
-            </TabPanel>
-            <TabPanel value={value} index={4}>
-              Item Five
-            </TabPanel>
-            <TabPanel value={value} index={5}>
-              Item Six
-            </TabPanel>
-            <TabPanel value={value} index={6}>
-              Item Seven
-            </TabPanel>
+ 
+           
           </Box>
         </div>
       </div>
