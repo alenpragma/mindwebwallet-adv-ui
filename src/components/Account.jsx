@@ -448,7 +448,7 @@ document.title = "Account"
             <Button
               onClick={logout}
               variant="contained"
-              className=" !bg-colorprimary"
+              className=" !bg-colorprimary !text-[12px] md:!text-[15px]"
             >
               Logout
             </Button>
@@ -465,14 +465,14 @@ document.title = "Account"
             <Button
               onClick={handleExportPrivateKey}
               variant="contained"
-              className=" !bg-colorprimary "
+              className=" !bg-colorprimary !text-[12px] md:!text-[15px]"
             >
               ExportWallet
             </Button>
             <Button
               onClick={switchProvider}
               variant="contained"
-              className=" !bg-colorprimary"
+              className=" !bg-colorprimary !text-[12px] md:!text-[15px]"
             >
               Swich Network
             </Button>
@@ -494,16 +494,10 @@ document.title = "Account"
               onChange={handleChange}
               aria-label="Vertical tabs example"
               sx={{ borderRight: 1, borderColor: "divider" }}
-            
-              
             >
               <Tab className=" !text-[12px] md:!text-[15px] " label="Send MIND" {...a11yProps(0)} />
               <Tab className="!text-[12px] md:!text-[15px] " label="Send token" {...a11yProps(1)} />
               <Tab className="!text-[12px] md:!text-[15px] " label="import erc20" {...a11yProps(2)} />
-              {/* <Tab label="Item Four" {...a11yProps(3)} />
-              <Tab label="Item Five" {...a11yProps(4)} />
-              <Tab label="Item Six" {...a11yProps(5)} />
-              <Tab label="Item Seven" {...a11yProps(6)} /> */}
             </Tabs> 
             <TabPanel  value={value} index={0} className="!w-full   !text-[12px] md:!text-[15px]">
               <div className="flex flex-col gap-y-5 w-full">
@@ -533,14 +527,14 @@ document.title = "Account"
                       setAmount("");
                     }}
                     variant="contained"
-                    className=" !bg-white !text-colorprimary"
+                    className=" !bg-white !text-colorprimary !text-[12px] md:!text-[15px]"
                   >
                     Reset
                   </Button>
                   <Button
                     onClick={handleSend}
                     variant="contained"
-                    className=" !bg-colorprimary"
+                    className=" !bg-colorprimary !text-[12px] md:!text-[15px]"
                   >
                     Send
                   </Button>
@@ -565,7 +559,6 @@ document.title = "Account"
                   USDC
                 </label>
               </div>
-
               <div className="flex gap-y-5 flex-col mt-4 w-full">
                 <TextField
                   id="outlined-basic"
@@ -583,18 +576,15 @@ document.title = "Account"
                   onChange={(e) => setAmountToSend(e.target.value)}
                   className="!w-full "
                 />
-
              <div className="">
              <Button
                   onClick={sendToken}
                   variant="contained"
-                  className=" !bg-colorprimary"
+                  className=" !bg-colorprimary !text-[12px] md:!text-[15px]"
                 >
                   Send
                 </Button>
              </div>
-
-
                 <p className="!text-[12px] md:!text-[15px]">Transaction Hash: {transactionHash}</p>
               </div>
             </TabPanel>
@@ -614,7 +604,7 @@ document.title = "Account"
                   <Button
                     onClick={() => importToken(sTokenAddress)}
                     variant="contained"
-                    className="import-token-btn "
+                    className="import-token-btn !text-[12px] md:!text-[15px]"
                   >
                     Import Token
                   </Button>
@@ -664,25 +654,14 @@ document.title = "Account"
                 <Button
                   onClick={st}
                   variant="contained"
-                  className="send-token-btn !mt-3"
+                  className="send-token-btn !mt-3 !text-[12px] md:!text-[15px]"
                 >
                   Send
                 </Button>
               </div>
             </TabPanel>
  
-            {/* <TabPanel value={value} index={3}>
-              Item Four
-            </TabPanel>
-            <TabPanel value={value} index={4}>
-              Item Five
-            </TabPanel>
-            <TabPanel value={value} index={5}>
-              Item Six
-            </TabPanel>
-            <TabPanel value={value} index={6}>
-              Item Seven
-            </TabPanel> */}
+           
           </Box>
         </div>
       </div>
