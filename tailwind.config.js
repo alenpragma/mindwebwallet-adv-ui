@@ -10,7 +10,12 @@ export default {
         'container': '1150px',
       },
       colors:{
-        "colorprimary":"#046EF6"
+        "colorprimary":" #FF971D",
+        "bg":"#222"
+      },
+      fontFamily: {
+        'josefin': "'Josefin Sans', sans-serif",
+       
       }
 
     },

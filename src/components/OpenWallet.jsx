@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { keys } from "../sclices/privateKeySlice";
 import { ToastContainer, toast } from "react-toastify";
 import { providers, ethers } from "ethers";
+import { PiSmileyXEyes, PiSmiley } from "react-icons/pi";
 
 const OpenWallet = () => {
   let navigate = useNavigate();
@@ -50,6 +51,7 @@ const OpenWallet = () => {
   }, []);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+  
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
@@ -107,6 +109,7 @@ const OpenWallet = () => {
 
   // };
 
+
   const openWallet = () => {
     const input = privateKey;
     if (input === null) {
@@ -133,27 +136,74 @@ const OpenWallet = () => {
           address: wallet.address,
         })
       );
-      
+
       navigate("/account");
     } catch (error) {
       console.log(error);
       toast("Invalid private key");
     }
   };
-  useEffect(()=>{
-    document.title = "Open Wallet"
-      },[document.title])
+  useEffect(() => {
+    document.title = "Open Wallet";
+  }, [document.title]);
 
   return (
-    <>
+    <div className="flex body selection:bg-transparent">
       <ToastContainer />
-      <div className=" mt-5 px-[10px]">
-        <div className="p-5 rounded-md shadow-lg max-w-[400px] mx-auto">
-          <h3 className="text-[20px] md:text-[25px] font-semibold text-colorprimary text-center uppercase">
+      <div className="w-[50%] hidden md:flex justify-center items-center">
+        <div className="font-josefin ">
+          <h1 className="text-center block text-[50px] md:leading-[80px] lg:leading-[110px] lg:text-[80px] md:mt-[50px] lg:mt-[-80px] font-bold">
+            <span>M</span>
+            <span>I</span>
+            <span>N</span>
+            <span>D</span>
+            <span>W</span>
+            <span>E</span>
+            <span>B</span>
+            <br/>
+            <span>W</span>
+            <span>A</span>
+            <span>L</span>
+            <span>L</span>
+            <span>E</span>
+            <span>T</span>
+          </h1>
+        </div>
+      </div>
+      <div className=" mt-5 pl-[10px] pr-[10px] md:pr-[50px] lg:pr-[200px] !font-josefin selection:bg-transparent w-full md:w-[50%] flex flex-col justify-center">
+      <h1 className="text-center !leading-0 md:hidden text-[30px] mt-[20px] sm:mt-[70px] font-bold">
+            <span>M</span>
+            <span>I</span>
+            <span>N</span>
+            <span>D</span>
+            <span>W</span>
+            <span>E</span>
+            <span>B</span>
+            <span>&nbsp; </span>
+            <span>W</span>
+            <span>A</span>
+            <span>L</span>
+            <span>L</span>
+            <span>E</span>
+            <span>T</span>
+          </h1>
+        <div className="p-[10px] md:p-7 glass-container rounded-2xl shadow-lg w-[100%]">
+          <h3 className="text-[20px] font-josefin md:text-[25px] relative z-10 font-semibold text-colorprimary text-center uppercase">
             Open your wallet
           </h3>
-          <div className="flex justify-center mt-5">
-            <FormControl sx={{ width: "100%" }}>
+          <div className=" justify-center mt-5">
+            <div className="relative w-full cursor-pointer selection:bg-transparent">
+              <div onMouseDown={handleMouseDownPassword} onClick={handleClickShowPassword} className="absolute z-10 right-5 top-[50%] translate-y-[-50%] text-[35px] text-white hover:cursor-pointer">
+                {showPassword ? <PiSmiley /> : <PiSmileyXEyes /> }
+              </div>
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter Your Private Key"
+                className="glass-container w-full p-5 border-none outline-none rounded-3xl text-white"
+                onChange={handleChange}
+              />
+            </div>
+            {/* <FormControl sx={{ width: "100%" }} className="relative z-10">
               <InputLabel htmlFor="outlined-adornment-password">
                 Private Key
               </InputLabel>
@@ -177,13 +227,13 @@ const OpenWallet = () => {
                 }
                 label="Password"
               />
-            </FormControl>
+            </FormControl> */}
           </div>
           <div className="flex justify-center mt-5">
             <Button
               variant="contained"
               onClick={openWallet}
-              className="w-full py-2 uppercase bg-colorprimary hover:bg-colorsecondary"
+              className="w-full !py-4 uppercase !bg-colorprimary hover:bg-colorsecondary !rounded-3xl !font-josefin"
             >
               Open Wallet
             </Button>
@@ -192,14 +242,129 @@ const OpenWallet = () => {
             <Button
               variant="outlined"
               onClick={createAccount}
-              className="w-full py-2 uppercase border-colorprimary text-colorprimary hover:text-colorsecondary"
+              className="w-full !py-4 uppercase !bg-white !border-none border-colorprimary !text-colorprimary hover:text-colorsecondary !rounded-3xl !font-josefin"
             >
               Create a new wallet
             </Button>
           </div>
         </div>
       </div>
-    </>
+      <style jsx>{`
+        .body {
+          height: calc(100vh - 80px);
+        }
+        @import url("https://fonts.googleapis.com/css?family=Luckiest+Guy");
+        /* JUMP */
+        h1 {
+          cursor: default;
+          
+          width: 100%;
+          height: 100px;
+          margin: auto;
+        }
+
+        h1 span {
+          position: relative;
+          top: 20px;
+          display: inline-block;
+          -webkit-animation: bounce 1s ease infinite alternate;
+
+          text-align: center;
+          color: #fff;
+          text-shadow: 0 1px 0 #ccc, 0 2px 0 #ccc, 0 3px 0 #ccc, 0 4px 0 #ccc,
+            0 5px 0 #ccc, 0 6px 0 transparent, 0 7px 0 transparent,
+            0 8px 0 transparent, 0 9px 0 transparent,
+            0 10px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        h1 span:nth-child(2) {
+          -webkit-animation-delay: 0.1s;
+        }
+
+        h1 span:nth-child(3) {
+          -webkit-animation-delay: 0.2s;
+        }
+
+        h1 span:nth-child(4) {
+          -webkit-animation-delay: 0.3s;
+        }
+
+        h1 span:nth-child(5) {
+          -webkit-animation-delay: 0.4s;
+        }
+
+        h1 span:nth-child(6) {
+          -webkit-animation-delay: 0.5s;
+        }
+
+        h1 span:nth-child(7) {
+          -webkit-animation-delay: 0.6s;
+        }
+
+        h1 span:nth-child(8) {
+          -webkit-animation-delay: 0.2s;
+        }
+
+        h1 span:nth-child(9) {
+          -webkit-animation-delay: 0.3s;
+        }
+
+        h1 span:nth-child(10) {
+          -webkit-animation-delay: 0.4s;
+        }
+
+        h1 span:nth-child(11) {
+          -webkit-animation-delay: 0.5s;
+        }
+
+        h1 span:nth-child(12) {
+          -webkit-animation-delay: 0.6s;
+        }
+
+        h1 span:nth-child(13) {
+          -webkit-animation-delay: 0.7s;
+        }
+
+        h1 span:nth-child(14) {
+          -webkit-animation-delay: 0.8s;
+        }
+        h1 span:nth-child(15) {
+          -webkit-animation-delay: 0.9s;
+        }
+        h1 span:nth-child(16) {
+          -webkit-animation-delay: 0.1s;
+        }
+        /* ANIMATION */
+        @-webkit-keyframes bounce {
+          100% {
+            top: -20px;
+            text-shadow: 0 1px 0 #ccc, 0 2px 0 #ccc, 0 3px 0 #ccc, 0 4px 0 #ccc,
+              0 5px 0 #ccc, 0 6px 0 #ccc, 0 7px 0 #ccc, 0 8px 0 #ccc,
+              0 9px 0 #ccc, 0 50px 25px rgba(0, 0, 0, 0.2);
+          }
+        }
+        .glass-container {
+          background: linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0.1),
+            rgba(255, 255, 255, 0)
+          );
+          backdrop-filter: blur(10px);
+
+          box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+          animation: shine 1.5s infinite alternate;
+        }
+
+        @keyframes shine {
+          0% {
+            background-position: 200% center;
+          }
+          100% {
+            background-position: -200% center;
+          }
+        }
+      `}</style>
+    </div>
   );
 };
 

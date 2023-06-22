@@ -2,7 +2,6 @@ import React from "react";
 import OpenWallet from "./components/OpenWallet";
 import Navbar from "./components/Navbar";
 import CreateAccount from "./components/CreateAccount";
-//import hanimp from "./components/hanimp";
 import {
   createBrowserRouter,
   RouterProvider,
@@ -15,18 +14,26 @@ import Account from "./components/Account";
 let router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Rootlayout />}>
-      <Route index element={<OpenWallet />}></Route>
-      <Route path="/createaccount" element={<CreateAccount />}></Route>
-      <Route path="/account" element={<Account />}></Route>
+      <Route index element={<OpenWallet />} />
+      <Route path="/createaccount" element={<CreateAccount />} />
+      <Route path="/account" element={<Account />} />
     </Route>
   )
 );
 
 const App = () => {
   return (
-    <>
+    <div className="app relative">
+      <div className="absolute w-[100%] h-[100%] bg-[#000000bc]"></div>
       <RouterProvider router={router} />
-    </>
+      <style jsx>{`
+        .app {
+          background-image: url("https://media.giphy.com/media/W5UoBN0YMdT1QP8Yfr/giphy.gif");
+          background-repeat: no-repeat;
+          background-size: cover;
+        }
+      `}</style>
+    </div>
   );
 };
 
