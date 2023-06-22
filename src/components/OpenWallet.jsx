@@ -152,7 +152,7 @@ const OpenWallet = () => {
       <ToastContainer />
       <div className="w-[50%] hidden md:flex justify-center items-center">
         <div className="font-josefin ">
-          <h1 className="text-center block text-[50px] lg:text-[80px] md:mt-[50px] lg:mt-[-80px] font-bold">
+          <h1 className="text-center block text-[50px] md:leading-[80px] lg:leading-[110px] lg:text-[80px] md:mt-[50px] lg:mt-[-80px] font-bold">
             <span>M</span>
             <span>I</span>
             <span>N</span>
@@ -171,7 +171,7 @@ const OpenWallet = () => {
         </div>
       </div>
       <div className=" mt-5 pl-[10px] pr-[10px] md:pr-[50px] lg:pr-[200px] !font-josefin selection:bg-transparent w-full md:w-[50%] flex flex-col justify-center">
-      <h1 className="text-center md:hidden text-[30px] mt-[20px] sm:mt-[70px] font-bold">
+      <h1 className="text-center !leading-0 md:hidden text-[30px] mt-[20px] sm:mt-[70px] font-bold">
             <span>M</span>
             <span>I</span>
             <span>N</span>
@@ -257,7 +257,7 @@ const OpenWallet = () => {
         /* JUMP */
         h1 {
           cursor: default;
-          line-height: 110px;
+          
           width: 100%;
           height: 100px;
           margin: auto;
