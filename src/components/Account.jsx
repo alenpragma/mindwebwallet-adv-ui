@@ -22,6 +22,7 @@ import Slide from "@mui/material/Slide";
 import { FileCopy } from "@mui/icons-material";
 import { provider, w3, switchProvider } from "./rpc";
 import { abi } from "./abi/erc20";
+import { HiLogout } from "react-icons/hi";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -403,13 +404,12 @@ const Account = () => {
   const handleTokenSelection = (e) => {
     setSTokenAddress(e.target.value);
   };
-  useEffect(()=>{
-document.title = "Account"
-  },[document.title])
+  useEffect(() => {
+    document.title = "Account";
+  }, [document.title]);
 
   return (
     <>
-
       <ToastContainer />
       {youprivateKey && (
         <Dialog
@@ -439,7 +439,7 @@ document.title = "Account"
         </Dialog>
       )}
       <div className=" mt-5 px-[10px] max-w-container mx-auto pb-4">
-        <div className="p-5 rounded-md shadow-lg  w-full mx-auto">
+        <div className="p-5 glass-container text-white !font-josefin rounded-md shadow-lg  w-full mx-auto">
           <div className="flex items-center justify-between">
             <h3 className="text-[20px] md:text-[25px] font-semibold text-colorprimary  uppercase mb-4">
               <AccountCircleIcon className="!text-[30px] mb-2" /> Account
@@ -448,9 +448,9 @@ document.title = "Account"
             <Button
               onClick={logout}
               variant="contained"
-              className=" !bg-colorprimary !text-[12px] md:!text-[15px]"
+              className=" !bg-colorprimary !text-[18px] md:!text-[25px] !rounded-3xl"
             >
-              Logout
+              <HiLogout />
             </Button>
           </div>
           <p className="mt-5 text-[12px] sm:text-[18px]">
@@ -465,14 +465,14 @@ document.title = "Account"
             <Button
               onClick={handleExportPrivateKey}
               variant="contained"
-              className=" !bg-colorprimary !text-[12px] md:!text-[15px]"
+              className=" !py-[10px] !md:py-[30px] uppercase !bg-colorprimary !border-none border-colorprimary !text-white hover:text-colorsecondary !rounded-3xl !font-josefin"
             >
               ExportWallet
             </Button>
             <Button
               onClick={switchProvider}
               variant="contained"
-              className=" !bg-colorprimary !text-[12px] md:!text-[15px]"
+              className=" !py-[10px] !md:py-[30px] uppercase !bg-colorprimary !border-none border-colorprimary !text-white hover:text-colorsecondary !rounded-3xl !font-josefin"
             >
               Swich Network
             </Button>
@@ -484,8 +484,8 @@ document.title = "Account"
               flexGrow: 1,
               bgcolor: "background.paper",
               display: "flex",
-            
             }}
+            className="glass-container !font-josefin "
           >
             <Tabs
               orientation="vertical"
@@ -495,31 +495,63 @@ document.title = "Account"
               aria-label="Vertical tabs example"
               sx={{ borderRight: 1, borderColor: "divider" }}
             >
-              <Tab className=" !text-[12px] md:!text-[15px] " label="Send MIND" {...a11yProps(0)} />
-              <Tab className="!text-[12px] md:!text-[15px] " label="Send token" {...a11yProps(1)} />
-              <Tab className="!text-[12px] md:!text-[15px] " label="import erc20" {...a11yProps(2)} />
-            </Tabs> 
-            <TabPanel  value={value} index={0} className="!w-full   !text-[12px] md:!text-[15px]">
+              <Tab
+                className=" !text-[12px] md:!text-[15px] text-white !font-josefin"
+                label="Send MIND"
+                {...a11yProps(0)}
+              />
+              <Tab
+                className="!text-[12px] md:!text-[15px] text-white !font-josefin"
+                label="Send token"
+                {...a11yProps(1)}
+              />
+              <Tab
+                className="!text-[12px] md:!text-[15px] text-white !font-josefin"
+                label="import erc20"
+                {...a11yProps(2)}
+              />
+            </Tabs>
+            <TabPanel
+              value={value}
+              index={0}
+              className="!w-full  !text-[12px] md:!text-[15px]"
+            >
               <div className="flex flex-col gap-y-5 w-full">
-                <div className="text-colorprimary text-center font-semibold text-[14px] md:text-[18px] ">
+                <div className="text-colorprimary text-center font-semibold text-[14px] md:text-[18px] font-josefin">
                   Perform a regular transaction, send MIND to another account
                 </div>
-                <TextField
+                <input
+                  placeholder="Recipient Address"
+                  className="glass-container font-josefin  w-full !p-[15px] !md:p-[30px] border-none outline-none rounded-3xl text-white"
+                  label="Recipient Address"
+                  variant="outlined"
+                  value={recipientAddress}
+                  onChange={(e) => setRecipientAddress(e.target.value)}
+                />
+                {/* <TextField
                   id="outlined-basic"
                   label="Recipient Address"
                   className="!w-full"
                   variant="outlined"
                   value={recipientAddress}
                   onChange={(e) => setRecipientAddress(e.target.value)}
+                /> */}
+                <input
+                  placeholder="Amount"
+                  className="glass-container font-josefin  w-full !p-[15px] !md:p-[30px] border-none outline-none rounded-3xl text-white"
+                  type="number"
+                  label="Amount"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
                 />
-                <TextField
+                {/* <TextField
                   id="outlined-basic"
                   type="number"
                   label="Amount"
                   variant="outlined"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                />
+                /> */}
                 <div className="flex gap-x-3">
                   <Button
                     onClick={() => {
@@ -527,22 +559,26 @@ document.title = "Account"
                       setAmount("");
                     }}
                     variant="contained"
-                    className=" !bg-white !text-colorprimary !text-[12px] md:!text-[15px]"
+                    className=" !bg-white !rounded-2xl !font-josefin !text-colorprimary !text-[12px] md:!text-[15px]"
                   >
                     Reset
                   </Button>
                   <Button
                     onClick={handleSend}
                     variant="contained"
-                    className=" !bg-colorprimary !text-[12px] md:!text-[15px]"
+                    className=" !bg-colorprimary !rounded-2xl !font-josefin !text-[12px] md:!text-[15px]"
                   >
                     Send
                   </Button>
                 </div>
               </div>
             </TabPanel>
-            <TabPanel   value={value} index={1} className="!w-full   !text-[12px] md:!text-[15px]">
-              <div className="flex flex-col gap-y-2 w-full !text-[12px] md:!text-[15px]">
+            <TabPanel
+              value={value}
+              index={1}
+              className="!w-full   !text-[12px] md:!text-[15px]"
+            >
+              <div className="flex flex-col gap-y-2 w-full font-josefin text-white !text-[12px] md:!text-[15px]">
                 <h1>
                   USDT Balance: <span>{tokenBalance.usdt}</span>
                 </h1>
@@ -560,58 +596,88 @@ document.title = "Account"
                 </label>
               </div>
               <div className="flex gap-y-5 flex-col mt-4 w-full">
-                <TextField
+                {/* <TextField
                   id="outlined-basic"
                   label="Recipient Address"
                   variant="outlined"
                   onChange={(e) => setrcvAddress(e.target.value)}
                   className="!w-full"
+                /> */}
+                <input
+                  placeholder="Recipient Address"
+                  className="glass-container font-josefin  w-full !p-[15px] !md:p-[30px] border-none outline-none rounded-3xl text-white"
+                  label="Amount"
+                  onChange={(e) => setrcvAddress(e.target.value)}
+                />
+                <input
+                  placeholder="Amount"
+                  className="glass-container font-josefin  w-full !p-[15px] !md:p-[30px] border-none outline-none rounded-3xl text-white"
+                  id="amount"
+                  type="number"
+                  onChange={(e) => setAmountToSend(e.target.value)}
                 />
 
-                <TextField
+                {/* <TextField
                   id="amount"
                   type="number"
                   label="Amount"
                   variant="outlined"
                   onChange={(e) => setAmountToSend(e.target.value)}
                   className="!w-full "
-                />
-             <div className="">
-             <Button
-                  onClick={sendToken}
-                  variant="contained"
-                  className=" !bg-colorprimary !text-[12px] md:!text-[15px]"
-                >
-                  Send
-                </Button>
-             </div>
-                <p className="!text-[12px] md:!text-[15px]">Transaction Hash: {transactionHash}</p>
+                /> */}
+                <div className="">
+                  <Button
+                    onClick={sendToken}
+                    variant="contained"
+                    className=" !bg-colorprimary !text-[12px] md:!text-[15px] !font-josefin !rounded-2xl"
+                  >
+                    Send
+                  </Button>
+                </div>
+                <p className="!text-[12px] md:!text-[15px] !font-josefin text-white">
+                  Transaction Hash: {transactionHash}
+                </p>
               </div>
             </TabPanel>
-            <TabPanel   value={value} index={2} className="!w-full   !text-[12px] md:!text-[15px]">
+            <TabPanel
+              value={value}
+              index={2}
+              className="!w-full   !text-[12px] md:!text-[15px]"
+            >
               <div>
                 <div className="flex flex-col w-full">
-                  <TextField
+                  <input
+                    id="token-address"
+                    value={sTokenAddress}
+                    placeholder="Enter ERC20 token contract address"
+                    className="glass-container   w-full !p-[15px] !md:p-[30px] border-none outline-none rounded-3xl text-white"
+                    onChange={handleTokenSelection}
+                   
+                  />
+
+                  {/* <TextField
                     id="token-address"
                     value={sTokenAddress}
                     label="Enter ERC20 token contract address"
                     variant="outlined"
                     onChange={handleTokenSelection}
                     className="!w-full"
-                  />
+                  /> */}
 
-                  <div className="mt-3">
-                  <Button
-                    onClick={() => importToken(sTokenAddress)}
-                    variant="contained"
-                    className="import-token-btn !text-[12px] md:!text-[15px]"
-                  >
-                    Import Token
-                  </Button>
+                  <div className="mt-5">
+                    <Button
+                      onClick={() => importToken(sTokenAddress)}
+                      variant="contained"
+                      className="import-token-btn !font-josefin !bg-colorprimary !rounded-2xl  !text-[12px] md:!text-[15px]"
+                    >
+                      Import Token
+                    </Button>
                   </div>
                 </div>
 
-                <h2 className="text-colorprimary  font-semibold text-[14px] md:text-[18px] mt-3">Imported Tokens</h2>
+                <h2 className="text-colorprimary font-josefin  font-semibold text-[14px] md:text-[18px] mt-3">
+                  Imported Tokens
+                </h2>
                 {tList.map((token) => (
                   <div key={token.contractAddress}>
                     <h3>{token.name}</h3>
@@ -628,43 +694,101 @@ document.title = "Account"
                   </div>
                 ))}
 
-                <h2 className="text-colorprimary  font-semibold text-[14px] md:text-[18px] mt-3">Send Token</h2>
+                <h2 className="text-colorprimary font-josefin font-semibold text-[14px] md:text-[18px] mt-3">
+                  Send Token
+                </h2>
                 <div className="flex flex-col  gap-x-3 mt-7 w-full ">
-                  <label htmlFor="amount-input" className="font-semibold mb-2">Amount to Send:</label>
-                  <TextField
+                  <label htmlFor="amount-input" className="font-semibold mb-2 font-josefin text-white">
+                    Amount to Send:
+                  </label>
+                  <input
+                    id="amount-input"
+                    type="number"
+                    placeholder="Amount"
+                    variant="outlined"
+                    onChange={(e) => setSAmount(e.target.value)}
+                
+                    className="glass-container   w-full !p-[15px] !md:p-[30px] border-none outline-none rounded-3xl text-white"
+                  />
+                  {/* <TextField
                     id="amount-input"
                     type="number"
                     label="Amount"
                     variant="outlined"
                     onChange={(e) => setSAmount(e.target.value)}
                     className="!w-full"
-                  />
+                  /> */}
                 </div>
                 <div className="flex flex-col  gap-x-3 mt-3 w-full">
-                  <label htmlFor="recipient-input" className="font-semibold mb-2">Recipient Address:</label>
-                  <TextField
+                  <label
+                    htmlFor="recipient-input"
+                    className="font-semibold mb-2 font-josefin text-white"
+                  >
+                    Recipient Address:
+                  </label>
+                  <input
+                   id="recipient-input"
+                   value={rAddress}
+                   placeholder="Recipient Address"
+      
+                   onChange={(e) => setRAddress(e.target.value)}
+                    className="glass-container   w-full !p-[15px] !md:p-[30px] border-none outline-none rounded-3xl text-white"
+                  />
+                  {/* <TextField
                     id="recipient-input"
                     value={rAddress}
                     label="Recipient Address"
                     variant="outlined"
                     onChange={(e) => setRAddress(e.target.value)}
                     className="!w-full"
-                  />
+                  /> */}
                 </div>
                 <Button
                   onClick={st}
                   variant="contained"
-                  className="send-token-btn !mt-3 !text-[12px] md:!text-[15px]"
+                  className="send-token-btn !mt-4 !text-[12px] md:!text-[15px] !font-josefin !bg-colorprimary !rounded-2xl"
                 >
                   Send
                 </Button>
               </div>
             </TabPanel>
- 
-           
           </Box>
         </div>
       </div>
+      <style jsx>{`
+        .MuiTab-textColorPrimary {
+          color: #fff;
+        }
+        .Mui-selected {
+          color: #ff971d !important;
+        }
+        .MuiTabs-indicator {
+          background-color: #ff971d;
+        }
+        .body {
+          height: calc(110vh - 100px);
+        }
+        .glass-container {
+          background: linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0.1),
+            rgba(255, 255, 255, 0)
+          );
+          backdrop-filter: blur(10px);
+
+          box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+          animation: shine 1.5s infinite alternate;
+        }
+
+        @keyframes shine {
+          0% {
+            background-position: 200% center;
+          }
+          100% {
+            background-position: -200% center;
+          }
+        }
+      `}</style>
     </>
   );
 };
