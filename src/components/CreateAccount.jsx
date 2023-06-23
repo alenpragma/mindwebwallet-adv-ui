@@ -109,7 +109,7 @@ const CreateAccount = () => {
                   
                   <input
                     id="privatekey"
-                    className="glass-container   w-full !p-[15px] !md:p-[30px] border-none outline-none rounded-3xl text-white"
+                    className="glass-container !pr-[100px]  w-full !p-[15px] !md:p-[30px] border-none outline-none rounded-3xl text-white"
                     type={showPassword ? "text" : "password"}
                     value={keyData.key.keyInfo.privatekey}
                     onChange={handlePrivateKeyChange}
@@ -131,7 +131,7 @@ const CreateAccount = () => {
                   
                   <input
                     id="address"
-                    className="glass-container   w-full !p-[15px] !md:p-[30px] border-none outline-none rounded-3xl text-white"
+                    className="glass-container !pr-[70px]  w-full !p-[15px] !md:p-[30px] border-none outline-none rounded-3xl text-white"
                     type="text"
                     value={keyData.key.keyInfo.address}
                     onChange={handleAddressChange}

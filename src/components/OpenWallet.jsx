@@ -199,7 +199,7 @@ const OpenWallet = () => {
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter Your Private Key"
-                className="glass-container w-full !p-[15px] !md:p-[30px] border-none outline-none rounded-3xl text-white"
+                className="glass-container w-full !p-[15px] !md:p-[30px] !pr-[70px] border-none outline-none rounded-3xl text-white"
                 onChange={handleChange}
               />
             </div>
