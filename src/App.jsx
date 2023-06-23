@@ -24,7 +24,7 @@ let router = createBrowserRouter(
 const App = () => {
   return (
     <div className="app relative">
-      <div className="absolute w-[100%] h-[100%] bg-[#000000bc]"></div>
+      <div className=" fixed w-[100%] !h-[100vh] bg-[#000000bc]"></div>
       <RouterProvider router={router} />
       <style jsx>{`
         .app {

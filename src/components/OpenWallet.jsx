@@ -11,7 +11,7 @@ import {
 
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { keys } from "../sclices/privateKeySlice";
 import { ToastContainer, toast } from "react-toastify";
 import { providers, ethers } from "ethers";
@@ -152,7 +152,7 @@ const OpenWallet = () => {
       <ToastContainer />
       <div className="w-[50%] hidden md:flex justify-center items-center">
         <div className="font-josefin ">
-          <h1 className="text-center block text-[50px] md:leading-[80px] lg:leading-[110px] lg:text-[80px] md:mt-[50px] lg:mt-[-80px] font-bold">
+          <h1 className="text-center block text-[50px] md:leading-[80px] lg:leading-[110px] lg:text-[80px] md:mt-[-50px] lg:mt-[-80px] font-bold">
             <span>M</span>
             <span>I</span>
             <span>N</span>
@@ -170,8 +170,8 @@ const OpenWallet = () => {
           </h1>
         </div>
       </div>
-      <div className=" mt-5 pl-[10px] pr-[10px] md:pr-[50px] lg:pr-[200px] !font-josefin selection:bg-transparent w-full md:w-[50%] flex flex-col justify-center">
-      <h1 className="text-center !leading-0 md:hidden text-[30px] mt-[20px] sm:mt-[70px] font-bold">
+      <div className="w-full md:w-[50%] mt-[50px] md:mt-0 pl-[10px] pr-[10px] md:pr-[50px] lg:pr-[200px] !font-josefin selection:bg-transparent  flex flex-col md:justify-center">
+      <h1 className="text-center !leading-0 md:hidden text-[30px]  font-bold">
             <span>M</span>
             <span>I</span>
             <span>N</span>
@@ -187,7 +187,7 @@ const OpenWallet = () => {
             <span>E</span>
             <span>T</span>
           </h1>
-        <div className="p-[10px] md:p-7 glass-container rounded-2xl shadow-lg w-[100%]">
+        <div className="px-[20px] py-[30px] md:p-7 glass-container rounded-2xl shadow-lg w-[100%]">
           <h3 className="text-[20px] font-josefin md:text-[25px] relative z-10 font-semibold text-colorprimary text-center uppercase">
             Open your wallet
           </h3>
@@ -199,7 +199,7 @@ const OpenWallet = () => {
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter Your Private Key"
-                className="glass-container w-full p-5 border-none outline-none rounded-3xl text-white"
+                className="glass-container w-full !p-[15px] !md:p-[30px] border-none outline-none rounded-3xl text-white"
                 onChange={handleChange}
               />
             </div>
@@ -233,7 +233,7 @@ const OpenWallet = () => {
             <Button
               variant="contained"
               onClick={openWallet}
-              className="w-full !py-4 uppercase !bg-colorprimary hover:bg-colorsecondary !rounded-3xl !font-josefin"
+              className="w-full !py-[10px] !md:py-[30px] uppercase !bg-colorprimary hover:bg-colorsecondary !rounded-3xl !font-josefin"
             >
               Open Wallet
             </Button>
@@ -242,12 +242,13 @@ const OpenWallet = () => {
             <Button
               variant="outlined"
               onClick={createAccount}
-              className="w-full !py-4 uppercase !bg-white !border-none border-colorprimary !text-colorprimary hover:text-colorsecondary !rounded-3xl !font-josefin"
+              className="w-full !py-[10px] !md:py-[30px] uppercase !bg-white !border-none border-colorprimary !text-colorprimary hover:text-colorsecondary !rounded-3xl !font-josefin"
             >
               Create a new wallet
             </Button>
           </div>
         </div>
+        <p className="text-center mt-5 relative z-20 !text-white text-base md:text-[20px]">Need Help? Contact <Link className="text-colorprimary" to="/mindchain">Mindchain Help.</Link></p>
       </div>
       <style jsx>{`
         .body {
@@ -260,7 +261,7 @@ const OpenWallet = () => {
           
           width: 100%;
           height: 100px;
-          margin: auto;
+       
         }
 
         h1 span {
