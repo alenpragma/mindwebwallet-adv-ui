@@ -650,7 +650,7 @@ const Account = () => {
                     id="token-address"
                     value={sTokenAddress}
                     placeholder="Enter ERC20 token contract address"
-                    className="glass-container   w-full !p-[15px] !md:p-[30px] border-none outline-none rounded-3xl text-white"
+                    className="glass-container font-josefin   w-full !p-[15px] !md:p-[30px] border-none outline-none rounded-3xl text-white"
                     onChange={handleTokenSelection}
                    
                   />
@@ -708,7 +708,7 @@ const Account = () => {
                     variant="outlined"
                     onChange={(e) => setSAmount(e.target.value)}
                 
-                    className="glass-container   w-full !p-[15px] !md:p-[30px] border-none outline-none rounded-3xl text-white"
+                    className="glass-container font-josefin  w-full !p-[15px] !md:p-[30px] border-none outline-none rounded-3xl text-white"
                   />
                   {/* <TextField
                     id="amount-input"
@@ -732,7 +732,7 @@ const Account = () => {
                    placeholder="Recipient Address"
       
                    onChange={(e) => setRAddress(e.target.value)}
-                    className="glass-container   w-full !p-[15px] !md:p-[30px] border-none outline-none rounded-3xl text-white"
+                    className="glass-container font-josefin   w-full !p-[15px] !md:p-[30px] border-none outline-none rounded-3xl text-white"
                   />
                   {/* <TextField
                     id="recipient-input"

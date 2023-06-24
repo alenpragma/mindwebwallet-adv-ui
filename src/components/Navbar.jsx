@@ -12,10 +12,12 @@ const Navbar = () => {
          
         <span className="flex items-center gap-x-2 font-josefin text-[40px] h-auto md:text-[30px] ">
           <img
-              src="https://i.postimg.cc/WzP0q49y/logo.png"
-              className="   w-[50px] h-auto md:w-[50px] "
+              src="https://i.postimg.cc/d32413mk/MNDWALET-LOGO.png"
+              className="   w-[250px] h-auto md:w-[300px] "
               alt=""
-            /> <span className="text-[30px]  md:text-[40px] font-bold mt-2 text-colorprimary">MINDCHAIN</span> </span>
+            />
+             {/* <span className="text-[30px]  md:text-[40px] font-bold mt-2 text-colorprimary">MINDCHAIN</span>  */}
+            </span>
         </div>
       </div>
 
