@@ -1,8 +1,8 @@
 import { providers, ethers } from "ethers";
 import Web3 from "web3";
 
-let rpc1 ="https://mainnet-rpc.metaviralscan.com";
-let rpc2 = "https://testnet-rpc.metaviralscan.com";
+let rpc1 ="https://rpc-msc.mindchain.info/";
+let rpc2 = "https://testnet-msc.mindchain.info/";
 
 let provider = new ethers.providers.JsonRpcProvider(rpc1);
 let w3 = new Web3(rpc1);
